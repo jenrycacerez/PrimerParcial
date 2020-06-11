@@ -7,71 +7,71 @@
 @using Blazored.Toast.Services
 @inject IToastService toast
 
-    <EditForm Model="productos" OnValidSubmit="Guardar">
-        <DataAnnotationsValidator />
-        <div class="card">
-            <div class="card-header">
-                <h3>--Registro de Productos--</h3>
-            </div>
+<EditForm Model="productos" OnValidSubmit="Guardar">
+    <DataAnnotationsValidator />
+    <div class="card">
+        <div class="card-header">
+            <h3>--Registro de Productos--</h3>
+        </div>
 
-            <div class="card-body">
-                <form>
-                    @*ProductoId*@
-                    <div class="form-row align-items-center">
-                        <div class="col">
-                            <div class="form-group">
-                                <label>ID</label>
-                                <div class="input-group">
-                                    <InputNumber @bind-Value="productos.ProductoId" class="form-control col-4" />
-                                    <div class="input-group-append">
-                                        <button type="button" class="btn btn-primary input-group-text" @onclick="Buscar">Buscar</button>
-                                    </div>
+        <div class="card-body">
+            <form>
+                @*ProductoId*@
+                <div class="form-row align-items-center">
+                    <div class="col">
+                        <div class="form-group">
+                            <label>ID</label>
+                            <div class="input-group">
+                                <InputNumber @bind-Value="productos.ProductoId" class="form-control col-4" />
+                                <div class="input-group-append">
+                                    <button type="button" class="btn btn-primary input-group-text" @onclick="Buscar">Buscar</button>
                                 </div>
                             </div>
                         </div>
                     </div>
-
-
-                    @*Descripcion*@
-                    <div class="form-group">
-                        <label>Descripcion</label>
-                        <InputText @bind-Value="productos.Descripcion" class="form-control" />
-                        <ValidationMessage For="@(() => productos.Descripcion)" />
-                    </div>
-
-                    @*Existente*@
-                    <div class="form-group">
-                        <label>Exitencia:</label>
-                        <InputNumber @bind-Value="productos.Existencia" @onclick="Calculos" class="form-control" />
-                        <ValidationMessage For="@(() => productos.Existencia)" />
-                    </div>
-
-                    @*Costo*@
-                    <div class="form-group">
-                        <label>Costo:</label>
-                        <InputNumber @bind-Value="productos.Costo" @onclick="Calculos" class="form-control" />
-                        <ValidationMessage For="@(() => productos.Costo)" />
-                    </div>
-
-
-                    @*Inventario*@
-                    <div class="form-group">
-                        <label>Inventario</label>
-                        <InputNumber @bind-Value="productos.Inventario" class="form-control" readonly />
-                        <ValidationMessage For="@(() => productos.Inventario)" />
-                    </div>
-                </form>
-            </div>
-
-            <div class="card-footer">
-                <div class="form-group text-center" display: inline-block>
-                    <button type="button" class="btn btn-lg btn-primary" @onclick="Nuevo">Nuevo</button>
-                    <button type="submit" class="btn btn-lg btn-success">Guardar</button>
-                    <button type="button" class="btn btn-lg btn-danger" @onclick="Eliminar">Eliminar</button>
                 </div>
+
+
+                @*Descripcion*@
+                <div class="form-group">
+                    <label>Descripcion</label>
+                    <InputText @bind-Value="productos.Descripcion" class="form-control" />
+                    <ValidationMessage For="@(() => productos.Descripcion)" />
+                </div>
+
+                @*Existente*@
+                <div class="form-group">
+                    <label>Exitencia:</label>
+                    <InputNumber @bind-Value="productos.Existencia"  @onclick="Calculos" class="form-control" />
+                    <ValidationMessage For="@(() => productos.Existencia)" />
+                </div>
+
+                @*Costo*@
+                <div class="form-group">
+                    <label>Costo:</label>
+                    <InputNumber @bind-Value="productos.Costo"   @onclick="Calculos"  class="form-control" />
+                    <ValidationMessage For="@(() => productos.Costo)" />
+                </div>
+
+
+                @*Inventario*@
+                <div class="form-group">
+                    <label>Inventario</label>
+                    <InputNumber @bind-Value="productos.Inventario" class="form-control" @onclick="Calculos"  readonly />
+                    <ValidationMessage For="@(() => productos.Inventario)" />
+                </div>
+            </form>
+        </div>
+
+        <div class="card-footer">
+            <div class="form-group text-center" display: inline-block>
+                <button type="button" class="btn btn-lg btn-primary" @onclick="Nuevo">Nuevo</button>
+                <button type="submit" class="btn btn-lg btn-success">Guardar</button>
+                <button type="button" class="btn btn-lg btn-danger" @onclick="Eliminar">Eliminar</button>
             </div>
         </div>
-    </EditForm>
+    </div>
+</EditForm>
 
 @code {
 
@@ -92,8 +92,12 @@
 
     private void Calculos()
     {
-        decimal calcular = (productos.Costo * productos.Existencia);
-        productos.Inventario = int.Parse(calcular.ToString("NO"));
+        try
+        {
+            decimal calcular = (productos.Costo * productos.Existencia);
+            productos.Inventario = int.Parse(calcular.ToString("N0"));
+        }
+        catch { productos.Inventario = 0; }
     }
 
     private void Nuevo()
@@ -104,6 +108,7 @@
     private void Guardar()
     {
         bool paso;
+        Calculos();
         paso = ProductosBLL.Guardar(productos);
 
         if (paso)
@@ -149,6 +154,6 @@
         }
     }
 
-  
+
 
 }

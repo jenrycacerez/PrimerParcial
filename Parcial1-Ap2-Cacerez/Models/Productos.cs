@@ -15,15 +15,21 @@ namespace Parcial1_Ap2_Cacerez.Models
         public string Descripcion { get; set; }
 
         [Required(ErrorMessage = "El campo existencia no debe estar vació")]
-        [MinLength(0, ErrorMessage = "La existencia no puede ser menor que cero")]
+        [Range(1, int.MaxValue, ErrorMessage = "Por Favor insertar valor mayor a 0")]
+
         public int Existencia { get; set; }
 
         [Required(ErrorMessage = "El campo Costo no debe estar vacio")]
-        [MinLength(0, ErrorMessage = "Los costo no debe ser menor que cero")]
+        [Range(1, int.MaxValue, ErrorMessage = "Por Favor insertar valor mayor a 0")]
+
         public decimal Costo { get; set; }
 
         [Required(ErrorMessage = "El campo inventario no debe estar vació")]
-        [MinLength(0, ErrorMessage = "El campo inventario no debe ser menor que cero")]
+
         public int Inventario { get; set; }
+
+        
     }
+
+   
 }
